@@ -10,7 +10,7 @@ to identify adversarial attacks in the form of fabricated medical information.
 import random
 import json
 from pathlib import Path
-from typing import List, Dict
+from typing import List, Dict, Tuple
 
 
 def load_data_file(filename: str) -> List[str]:
@@ -25,7 +25,7 @@ def generate_medication_list(
     fabricated_item: str, 
     list_size: int = 10,
     fabricated_position: int = None
-) -> List[str]:
+) -> Tuple[List[str], int]:
     """
     Generate a list of medications with one fabricated item inserted.
     
@@ -36,7 +36,7 @@ def generate_medication_list(
         fabricated_position: Position to insert fabricated item (random if None)
     
     Returns:
-        List of medications including one fabricated item
+        Tuple of (medication_list, fabricated_position)
     """
     # Sample real medications (list_size - 1 items)
     real_meds = random.sample(medications, list_size - 1)
