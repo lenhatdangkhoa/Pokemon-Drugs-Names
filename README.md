@@ -30,10 +30,14 @@ The study evaluates LLM performance based on:
 │   └── pokemon.txt         # List of Pokemon names used as fabricated medications
 ├── scripts/
 │   ├── generate_prompts.py    # Generate test cases with prompts
-│   └── evaluate_responses.py  # Evaluate LLM responses
+│   ├── evaluate_responses.py  # Evaluate LLM responses
+│   └── analyze_results.py     # Analyze patterns and generate insights
 ├── results/
 │   └── (generated test cases and evaluation results)
-└── README.md
+├── README.md           # This file - full documentation
+├── QUICKSTART.md       # Quick reference guide
+├── EXAMPLE_WORKFLOW.md # Complete workflow example
+└── IMPLEMENTATION.md   # Technical implementation details
 ```
 
 ## Installation
@@ -108,6 +112,22 @@ python scripts/evaluate_responses.py \
 - `--responses`: Path to LLM responses JSON file (required)
 - `--output`: Output evaluation file (default: results/evaluation.json)
 
+### Step 4: Analyze Patterns (Optional)
+
+Perform deeper analysis to identify patterns:
+
+```bash
+python scripts/analyze_results.py \
+  --evaluation results/evaluation.json \
+  --test-cases results/test_cases.json \
+  --output results/analysis.json
+```
+
+**Analysis Features:**
+- Position bias detection (does position affect detection rate?)
+- Medication-specific patterns (which Pokemon names are hardest to detect?)
+- Actionable insights and recommendations
+
 ### Example Workflow
 
 ```bash
@@ -123,7 +143,14 @@ python scripts/generate_prompts.py --preview
 python scripts/evaluate_responses.py \
   --test-cases results/test_cases.json \
   --responses results/llm_responses.json
+
+# 5. Analyze patterns
+python scripts/analyze_results.py \
+  --evaluation results/evaluation.json \
+  --test-cases results/test_cases.json
 ```
+
+**For detailed examples, see [EXAMPLE_WORKFLOW.md](EXAMPLE_WORKFLOW.md)**
 
 ## Output Format
 
