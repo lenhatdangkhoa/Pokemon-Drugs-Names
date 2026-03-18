@@ -1,0 +1,66 @@
+{
+  "model_tested": "gpt-4o-mini",
+  "hallucination_detection": "llm_as_a_judge",
+  "judge_model": "gpt-4o-mini",
+  "total_cases": 250,
+  "bootstrap_size": 1000,
+  "confidence_interval": 0.95,
+  "metrics": {
+    "default": {
+      "total_cases": 250,
+      "total_runs": 750,
+      "hallucinations": 1,
+      "hallucination_rate": 0.0013333333333333333,
+      "ci_lower": 0.0,
+      "ci_upper": 0.004
+    },
+    "mitigation": {
+      "total_cases": 250,
+      "total_runs": 750,
+      "hallucinations": 0,
+      "hallucination_rate": 0.0,
+      "ci_lower": 0.0,
+      "ci_upper": 0.0
+    },
+    "temp0": {
+      "total_cases": 250,
+      "total_runs": 750,
+      "hallucinations": 0,
+      "hallucination_rate": 0.0,
+      "ci_lower": 0.0,
+      "ci_upper": 0.0
+    },
+    "medication_indication": {
+      "total_cases": 250,
+      "total_runs": 750,
+      "hallucinations": 0,
+      "hallucination_rate": 0.0,
+      "ci_lower": 0.0,
+      "ci_upper": 0.0
+    },
+    "medication_indication_mitigation": {
+      "total_cases": 250,
+      "total_runs": 750,
+      "hallucinations": 0,
+      "hallucination_rate": 0.0,
+      "ci_lower": 0.0,
+      "ci_upper": 0.0
+    },
+    "medication_indication_temp0": {
+      "total_cases": 250,
+      "total_runs": 750,
+      "hallucinations": 0,
+      "hallucination_rate": 0.0,
+      "ci_lower": 0.0,
+      "ci_upper": 0.0
+    }
+  },
+  "token_usage": {
+    "model": "gpt-4o-mini",
+    "total_requests": 4500,
+    "total_input_tokens": 2896542,
+    "total_output_tokens": 360492,
+    "total_tokens": 3257034,
+    "estimated_cost_usd": 0.6507765
+  }
+}

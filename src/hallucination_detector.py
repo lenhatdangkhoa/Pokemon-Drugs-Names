@@ -178,15 +178,22 @@ class HallucinationDetector:
                 original_drug_list=original_drug_list,
                 pokemon_name=pokemon_name
             )
-
-            # Make API call with temperature=0 for deterministic evaluation
-            response = self.client.chat.completions.create(
+            if self.model_param == "gpt-5-chat-latest":
+                response = self.client.chat.completions.create(
                 model=self.model_param,
                 messages=judge_messages,
-                temperature=self.temperature,  # Always 0.0 for deterministic judging
-                max_tokens=self.max_tokens,
+                temperature=self.temperature,
                 top_p=1.0
             )
+            else:
+            # Make API call with temperature=0 for deterministic evaluation
+                response = self.client.chat.completions.create(
+                    model=self.model_param,
+                    messages=judge_messages,
+                    temperature=self.temperature,  # Always 0.0 for deterministic judging
+                    max_tokens=self.max_tokens,
+                    top_p=1.0
+                )
 
             # Extract judge response
             judge_response = response.choices[0].message.content.strip()

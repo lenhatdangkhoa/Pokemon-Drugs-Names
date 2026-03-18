@@ -13,7 +13,7 @@ echo "Running quick test with GPT-4o-mini on brand dataset (subset of 3)..."
 python probing_pokemon.py \
     --mode openai \
     --model_name gpt-4o-mini \
-    --num_runs 1 \
+    --num_runs 3 \
     --temperature 0.7 \
     --input_file ./experiments/brand/pokemon.csv \
     --output_dir ./results/test_brand_gpt4o \

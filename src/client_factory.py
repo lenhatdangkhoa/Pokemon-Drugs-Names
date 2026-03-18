@@ -205,15 +205,24 @@ def get_completion_from_messages(
     for attempt in range(max_retries + 1):
         try:
             logging.debug(f"Making API call (attempt {attempt + 1}/{max_retries + 1}): model={model_param}, temp={temperature}, max_tokens={max_tokens}")
-
-            response = client.chat.completions.create(
+            if model_param == "gpt-5-chat-latest":
+                if temperature == 0.0:
+                    temperature = int(temperature)
+                response = client.chat.completions.create(
                 model=model_param,
                 messages=messages,
                 temperature=temperature,
-                max_tokens=max_tokens,
                 top_p=top_p,
             )
-            break  # Success, exit retry loop
+            else:
+                response = client.chat.completions.create(
+                    model=model_param,
+                    messages=messages,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                    top_p=top_p,
+                )
+                break  # Success, exit retry loop
 
         except Exception as e:
             error_str = str(e).lower()

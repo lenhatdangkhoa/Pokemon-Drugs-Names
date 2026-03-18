@@ -240,6 +240,8 @@ class ScriptArguments:
 
     # Experiment configuration
     num_runs: Optional[int] = field(default=3, metadata={"help": "Number of runs per condition"})
+    use_rxnorm: Optional[bool] = field(default=False, metadata={"help": "Append RxNorm lookup for the fictitious entity to the user prompt"})
+    use_rag: Optional[bool] = field(default=False, metadata={"help": "Append online drug evidence (RAG) to the prompt"}) 
     subset_test: Optional[bool] = field(default=False, metadata={"help": "Use subset for testing (e.g., --subset_test True --subset_size 3 for quick testing with 3 data points)"})
     subset_size: Optional[int] = field(default=10, metadata={"help": "Subset size if subset_test=True (e.g., 3 for quick testing)"})
 

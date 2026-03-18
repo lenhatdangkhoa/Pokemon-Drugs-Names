@@ -1,0 +1,37 @@
+Prompt,Setting,Confabulation Type,GPT-4o-mini
+Drug Dosing Prompt (generic drug dataset),Default,Overall confabulations,
+,,Inherited confabulations,
+,,Epistemic confabulations,
+,Default + Mitigation,Overall confabulations,
+,,Inherited confabulations,
+,,Epistemic confabulations,
+,Temp 0,Overall confabulations,
+,,Inherited confabulations,
+,,Epistemic confabulations,
+Drug Dosing Prompt (brand drug dataset),Default,Overall confabulations,"57.6% [52.4, 63.2]"
+,,Inherited confabulations,"55.5% [49.6, 61.1]"
+,,Epistemic confabulations,"2.1% [0.8, 3.7]"
+,Default + Mitigation,Overall confabulations,"1.1% [0.3, 2.1]"
+,,Inherited confabulations,"1.1% [0.3, 2.0]"
+,,Epistemic confabulations,"0.0% [0.0, 0.0]"
+,Temp 0,Overall confabulations,"60.5% [54.5, 66.3]"
+,,Inherited confabulations,"58.5% [52.5, 64.0]"
+,,Epistemic confabulations,"2.0% [0.5, 3.9]"
+Medication Indication Prompt (generic drug dataset),Default,Overall confabulations,
+,,Inherited confabulations,
+,,Epistemic confabulations,
+,Default + Mitigation,Overall confabulations,
+,,Inherited confabulations,
+,,Epistemic confabulations,
+,Temp 0,Overall confabulations,
+,,Inherited confabulations,
+,,Epistemic confabulations,
+Medication Indication Prompt (brand drug dataset),Default,Overall confabulations,"17.9% [13.7, 22.0]"
+,,Inherited confabulations,"17.7% [13.1, 21.9]"
+,,Epistemic confabulations,"0.1% [0.0, 0.4]"
+,Default + Mitigation,Overall confabulations,"0.0% [0.0, 0.0]"
+,,Inherited confabulations,"0.0% [0.0, 0.0]"
+,,Epistemic confabulations,"0.0% [0.0, 0.0]"
+,Temp 0,Overall confabulations,"14.7% [10.7, 19.1]"
+,,Inherited confabulations,"14.7% [10.4, 19.1]"
+,,Epistemic confabulations,"0.0% [0.0, 0.0]"
