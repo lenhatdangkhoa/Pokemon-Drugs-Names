@@ -1,0 +1,58 @@
+{
+  "model_tested": "google/gemma-3-27b-it",
+  "hallucination_detection": "llm_as_a_judge",
+  "judge_model": "google/gemma-3-27b-it",
+  "total_cases": 250,
+  "bootstrap_size": 1000,
+  "confidence_interval": 0.95,
+  "metrics": {
+    "default": {
+      "total_cases": 250,
+      "total_runs": 750,
+      "hallucinations": 4,
+      "hallucination_rate": 0.005333333333333333,
+      "ci_lower": 0.0,
+      "ci_upper": 0.014666666666666666
+    },
+    "mitigation": {
+      "total_cases": 250,
+      "total_runs": 750,
+      "hallucinations": 0,
+      "hallucination_rate": 0.0,
+      "ci_lower": 0.0,
+      "ci_upper": 0.0
+    },
+    "temp0": {
+      "total_cases": 250,
+      "total_runs": 750,
+      "hallucinations": 4,
+      "hallucination_rate": 0.005333333333333333,
+      "ci_lower": 0.0,
+      "ci_upper": 0.01469999999999997
+    },
+    "medication_indication": {
+      "total_cases": 250,
+      "total_runs": 750,
+      "hallucinations": 4,
+      "hallucination_rate": 0.005333333333333333,
+      "ci_lower": 0.0,
+      "ci_upper": 0.016
+    },
+    "medication_indication_mitigation": {
+      "total_cases": 250,
+      "total_runs": 750,
+      "hallucinations": 5,
+      "hallucination_rate": 0.006666666666666666,
+      "ci_lower": 0.0,
+      "ci_upper": 0.018666666666666665
+    },
+    "medication_indication_temp0": {
+      "total_cases": 250,
+      "total_runs": 750,
+      "hallucinations": 24,
+      "hallucination_rate": 0.032,
+      "ci_lower": 0.013333333333333332,
+      "ci_upper": 0.05333333333333334
+    }
+  }
+}

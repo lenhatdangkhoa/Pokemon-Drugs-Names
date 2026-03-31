@@ -9,14 +9,14 @@
     "default": {
       "total_cases": 250,
       "total_runs": 750,
-      "hallucinations": 3,
-      "hallucination_rate": 0.004,
+      "hallucinations": 0,
+      "hallucination_rate": 0.0,
       "ci_lower": 0.0,
-      "ci_upper": 0.012
+      "ci_upper": 0.0
     },
     "mitigation": {
       "total_cases": 250,
-      "total_runs": 748,
+      "total_runs": 750,
       "hallucinations": 0,
       "hallucination_rate": 0.0,
       "ci_lower": 0.0,
@@ -24,11 +24,11 @@
     },
     "temp0": {
       "total_cases": 250,
-      "total_runs": 748,
-      "hallucinations": 3,
-      "hallucination_rate": 0.004,
+      "total_runs": 750,
+      "hallucinations": 0,
+      "hallucination_rate": 0.0,
       "ci_lower": 0.0,
-      "ci_upper": 0.012
+      "ci_upper": 0.0
     },
     "medication_indication": {
       "total_cases": 250,
@@ -57,10 +57,10 @@
   },
   "token_usage": {
     "model": "gpt-4o-mini",
-    "total_requests": 4496,
-    "total_input_tokens": 2894012,
-    "total_output_tokens": 360760,
-    "total_tokens": 3254772,
-    "estimated_cost_usd": 0.6505578
+    "total_requests": 4500,
+    "total_input_tokens": 2571858,
+    "total_output_tokens": 358643,
+    "total_tokens": 2930501,
+    "estimated_cost_usd": 0.6009644999999999
   }
 }

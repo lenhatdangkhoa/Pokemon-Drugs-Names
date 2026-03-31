@@ -48,16 +48,16 @@ try:
     _pokemon_dir = PathLib(__file__).parent.parent
     env_path = _pokemon_dir / ".env"
     if env_path.exists():
-        load_dotenv(env_path)
+        load_dotenv(env_path, override=True)
     else:
         # Fallback to project root
         project_root = _pokemon_dir.parent
         env_path = project_root / ".env"
         if env_path.exists():
-            load_dotenv(env_path)
+            load_dotenv(env_path, override=True)
         else:
             # Final fallback to find_dotenv
-            load_dotenv(find_dotenv())
+            load_dotenv(find_dotenv(), override=True)
 except ImportError:
     # dotenv not available, skip loading
     pass

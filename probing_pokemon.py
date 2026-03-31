@@ -208,7 +208,7 @@ from src.vllm_setup import setup_vllm_mode, validate_openai_args, validate_azure
 #                       Environment Configuration                    #
 #####################################################################
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
-load_dotenv(find_dotenv())
+load_dotenv(find_dotenv(), override=True)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s')
 
 #####################################################################
@@ -242,6 +242,12 @@ class ScriptArguments:
     num_runs: Optional[int] = field(default=3, metadata={"help": "Number of runs per condition"})
     use_rxnorm: Optional[bool] = field(default=False, metadata={"help": "Append RxNorm lookup for the fictitious entity to the user prompt"})
     use_rag: Optional[bool] = field(default=False, metadata={"help": "Append online drug evidence (RAG) to the prompt"}) 
+    use_pokemon: Optional[bool] = field(
+        default=False,
+        metadata={
+            "help": "Append PokéAPI RAG (rag_cache_pokemon.json). Can be used alone or with --use_rag; if both are set, PokéAPI is used.",
+        },
+    )
     subset_test: Optional[bool] = field(default=False, metadata={"help": "Use subset for testing (e.g., --subset_test True --subset_size 3 for quick testing with 3 data points)"})
     subset_size: Optional[int] = field(default=10, metadata={"help": "Subset size if subset_test=True (e.g., 3 for quick testing)"})
 
@@ -302,6 +308,11 @@ def main():
         print(f"Subset test: ENABLED (using {args.subset_size} data points)")
     else:
         print(f"Subset test: DISABLED (using all data)")
+    if getattr(args, "use_rag", False) or getattr(args, "use_pokemon", False):
+        if getattr(args, "use_pokemon", False):
+            print("RAG: PokéAPI (rag_cache_pokemon.json)")
+        else:
+            print("RAG: RxNorm/OpenFDA (rag_cache.json)")
     if args.mode == "openai" or args.mode == "azure":
         max_workers = 1 if args.mode == "azure" else 10 if args.max_workers is None else args.max_workers
         print(f"Max workers: {max_workers} ({'sequential' if max_workers == 1 else 'parallel'})")

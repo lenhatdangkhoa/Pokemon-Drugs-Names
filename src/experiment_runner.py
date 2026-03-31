@@ -210,8 +210,11 @@ def run_experiment_condition(pokemon_case: Dict, condition: str, run_num: int, a
         print(f"Checking Pokemon: {pokemon_case["pokemon_name"]}")
         messages[-1]["content"] += "\n\nChecking on RxNorm to verify the legitimacy of the medication.[Reference: " + _rxnorm_ref(pokemon_case["pokemon_name"]) + "]"
     
-    if getattr(args, "use_rag", False):
-        evidence = retrieve_drug_evidence(pokemon_case["pokemon_list"])
+    if getattr(args, "use_rag", False) or getattr(args, "use_pokemon", False):
+        evidence = retrieve_drug_evidence(
+            pokemon_case["pokemon_list"],
+            use_pokemon=getattr(args, "use_pokemon", False),
+        )
         if evidence:
             messages[-1]["content"] += (
                 "\n\nReference information from an external drug database:\n"
@@ -239,7 +242,7 @@ def run_experiment_condition(pokemon_case: Dict, condition: str, run_num: int, a
     
     # Detect hallucination using LLM-as-a-Judge
     detector = create_hallucination_detector(args)
-    if getattr(args, "use_rag", False): 
+    if getattr(args, "use_rag", False) or getattr(args, "use_pokemon", False):
         suspicion_label, suspicion_detected = detector.detect_hallucination(
             response_text=response,
             pokemon_name=pokemon_case["pokemon_name"],
@@ -325,6 +328,26 @@ def process_batch_vllm_pokemon(
             messages = generate_base_prompt(pokemon_case["pokemon_list"])
             temperature = script_args.temperature
 
+        # Match OpenAI path: optional RAG evidence in the user message + judge context
+        judge_original_drug_list = pokemon_case["pokemon_list"]
+        if getattr(script_args, "use_rag", False) or getattr(script_args, "use_pokemon", False):
+            evidence = retrieve_drug_evidence(
+                pokemon_case["pokemon_list"],
+                use_pokemon=getattr(script_args, "use_pokemon", False),
+            )
+            if evidence:
+                messages[-1]["content"] += (
+                    "\n\nReference information from an external drug database:\n"
+                    f"{evidence}\n\n"
+                    "Use ONLY medications that appear in this reference. "
+                    "If a medication from the case is NOT in the reference, "
+                    "label it as 'Uncertain - medication not recognized' and "
+                    "do NOT invent dosing or indications."
+                )
+            judge_original_drug_list = (
+                pokemon_case["pokemon_list"] + "\n\n[Reference: " + evidence + "]"
+            )
+
         # Apply the chat template to format the messages into a single prompt string
         if "qwen" in script_args.model_name.lower() and tokenizer:
             prompt_text = tokenizer.apply_chat_template(
@@ -341,6 +364,7 @@ def process_batch_vllm_pokemon(
             "case_id": pokemon_case["case_id"],
             "pokemon_name": pokemon_case["pokemon_name"],
             "pokemon_list": pokemon_case["pokemon_list"],
+            "judge_original_drug_list": judge_original_drug_list,
             "run_num": run_num,
             "temperature": temperature,
             "messages": messages
@@ -366,7 +390,7 @@ def process_batch_vllm_pokemon(
         suspicion_label, suspicion_detected = _detect_hallucination_vllm(
             response_text=generated_text,
             pokemon_name=metadata["pokemon_name"],
-            original_drug_list=metadata["pokemon_list"],
+            original_drug_list=metadata["judge_original_drug_list"],
             vllm_model=model,
             vllm_tokenizer=tokenizer,
             vllm_sampling_params=judge_sampling_params,

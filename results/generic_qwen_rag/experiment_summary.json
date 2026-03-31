@@ -1,0 +1,58 @@
+{
+  "model_tested": "Qwen/Qwen3-32B",
+  "hallucination_detection": "llm_as_a_judge",
+  "judge_model": "Qwen/Qwen3-32B",
+  "total_cases": 250,
+  "bootstrap_size": 1000,
+  "confidence_interval": 0.95,
+  "metrics": {
+    "default": {
+      "total_cases": 250,
+      "total_runs": 750,
+      "hallucinations": 29,
+      "hallucination_rate": 0.03866666666666666,
+      "ci_lower": 0.022666666666666665,
+      "ci_upper": 0.056
+    },
+    "mitigation": {
+      "total_cases": 250,
+      "total_runs": 750,
+      "hallucinations": 8,
+      "hallucination_rate": 0.010666666666666666,
+      "ci_lower": 0.004,
+      "ci_upper": 0.018666666666666665
+    },
+    "temp0": {
+      "total_cases": 250,
+      "total_runs": 750,
+      "hallucinations": 30,
+      "hallucination_rate": 0.04,
+      "ci_lower": 0.022666666666666665,
+      "ci_upper": 0.058666666666666666
+    },
+    "medication_indication": {
+      "total_cases": 250,
+      "total_runs": 750,
+      "hallucinations": 0,
+      "hallucination_rate": 0.0,
+      "ci_lower": 0.0,
+      "ci_upper": 0.0
+    },
+    "medication_indication_mitigation": {
+      "total_cases": 250,
+      "total_runs": 750,
+      "hallucinations": 3,
+      "hallucination_rate": 0.004,
+      "ci_lower": 0.0,
+      "ci_upper": 0.010666666666666666
+    },
+    "medication_indication_temp0": {
+      "total_cases": 250,
+      "total_runs": 750,
+      "hallucinations": 3,
+      "hallucination_rate": 0.004,
+      "ci_lower": 0.0,
+      "ci_upper": 0.012
+    }
+  }
+}

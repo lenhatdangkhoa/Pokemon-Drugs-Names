@@ -10,9 +10,15 @@ from typing import Optional, Tuple
 try:
     from vllm import LLM, SamplingParams
     from vllm.lora.request import LoRARequest
+
     VLLM_AVAILABLE = True
 except ImportError:
     VLLM_AVAILABLE = False
+
+try:
+    from vllm.sampling_params import StructuredOutputsParams
+except ImportError:
+    StructuredOutputsParams = None  # type: ignore[misc, assignment]
 
 try:
     from transformers import AutoTokenizer
@@ -38,7 +44,8 @@ def setup_vllm_mode(args) -> Tuple:
         trust_remote_code=True,
         max_model_len=4096,
         gpu_memory_utilization=0.8,  # Reduce GPU memory utilization to avoid OOM
-        max_num_seqs=128,            # Reduce max concurrent sequences to save memory
+        max_num_seqs=128,           
+         # Reduce max concurrent sequences to save memory
         enforce_eager=True,          # Disable CUDA graphs to reduce memory usage
     )
 
@@ -54,15 +61,30 @@ def setup_vllm_mode(args) -> Tuple:
         repetition_penalty=args.repetition_penalty,
     )
 
-    # Setup sampling parameters for judge (always T=0 for deterministic evaluation)
-    judge_sampling_params = SamplingParams(
-        temperature=0.0,  # Always use T=0 for judge tasks
-        top_p=1.0,
-        max_tokens=500,  # Judge needs more tokens for analysis
-        presence_penalty=0.0,
-        frequency_penalty=0.0,
-        repetition_penalty=1.0,
-    )
+    # Judge: constrain decoding to exactly "[0]", "[1]", or "[2]" so greedy decoding cannot
+    # collapse into degenerate punctuation (e.g. repeated "!"), which breaks parsing.
+    if StructuredOutputsParams is not None:
+        judge_sampling_params = SamplingParams(
+            temperature=0.0,
+            top_p=1.0,
+            max_tokens=16,
+            presence_penalty=0.0,
+            frequency_penalty=0.0,
+            repetition_penalty=1.0,
+            structured_outputs=StructuredOutputsParams(
+                choice=["[0]", "[1]", "[2]"],
+            ),
+        )
+    else:
+        judge_sampling_params = SamplingParams(
+            temperature=0.0,
+            top_p=1.0,
+            max_tokens=32,
+            presence_penalty=0.0,
+            frequency_penalty=0.0,
+            repetition_penalty=1.15,
+            stop=["\n"],
+        )
 
     # Setup LoRA if specified
     lora_request = LoRARequest(
@@ -89,6 +111,33 @@ def validate_vllm_args(args) -> None:
         available_gpus = get_available_gpu_count()
         if args.number_gpus > available_gpus:
             raise ValueError(f"Requested {args.number_gpus} GPUs but only {available_gpus} available")
+
+        # vLLM tensor parallel requires num_attention_heads % tensor_parallel_size == 0
+        if TOKENIZER_AVAILABLE and args.number_gpus > 1:
+            try:
+                from transformers import AutoConfig
+
+                cfg = AutoConfig.from_pretrained(
+                    args.model_name, trust_remote_code=True
+                )
+            except Exception as e:
+                logging.warning(
+                    "Could not load model config to validate tensor parallel vs heads: %s",
+                    e,
+                )
+            else:
+                n_heads = getattr(cfg, "num_attention_heads", None)
+                if n_heads and n_heads % args.number_gpus != 0:
+                    valid = [
+                        d
+                        for d in range(1, min(available_gpus, n_heads) + 1)
+                        if n_heads % d == 0
+                    ]
+                    raise ValueError(
+                        f"number_gpus={args.number_gpus} is invalid for {args.model_name}: "
+                        f"tensor parallel size must divide num_attention_heads={n_heads}. "
+                        f"Try one of: {valid}"
+                    )
 
 
 def validate_openai_args(args) -> None:
